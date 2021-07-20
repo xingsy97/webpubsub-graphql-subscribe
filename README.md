@@ -1,5 +1,8 @@
 # webpubsub-graphql-subscribe
 
+## Introduction
+A typescript library helps developers use Microsoft Azure WebPub service in GraphQL subscription query and replace the in-memory event-publishing system [PubSub](https://www.apollographql.com/docs/apollo-server/data/subscriptions/#the-pubsub-class) provided by [Apollo server](https://www.apollographql.com/docs/apollo-server/data/subscriptions/) with Azure WebPub.
+
 ## Deployment
 
 1. Create an Azure Web PubSub service instance
@@ -30,7 +33,5 @@ cd webpubsub-graphql-subscribe
 npm run compile
 npm run integration
 ```
-
-
 
 ## Implementation
