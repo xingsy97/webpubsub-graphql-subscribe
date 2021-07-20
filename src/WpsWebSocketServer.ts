@@ -6,6 +6,9 @@ import {LOG, log} from "./utils"
 import WebSocket = require("ws");
 import { config } from "../settings";
 
+/*
+	a WebSocket.Server with no real server serice and corresponding port with an event emitter.
+*/
 class VirtualWebSocketServer extends WebSocket.Server{
 	ee:EventEmitter = new EventEmitter();
 	protocol: string = "graphql-ws";
@@ -22,7 +25,9 @@ class VirtualWebSocketServer extends WebSocket.Server{
 	}
 }
 
+/*
 
+*/
 class SubWpsWebSocketServer extends VirtualWebSocketServer{
 	serviceClient: WebPubSubServiceClient;
 	connectionId: string;
@@ -49,7 +54,7 @@ class WpsWebSocketServer extends VirtualWebSocketServer {
 	constructor(wps_http_port: number, wps_conn_string: string, hub_name: string, express_server: any){
 		super();
 		this.serviceClient = new WebPubSubServiceClient(wps_conn_string, hub_name);
-		this.readyState = WebSocket.CLOSED;
+		// this.readyState = WebSocket.CLOSED;
 		this.app = express_server ? express_server : express();
 
 		let handler = new WebPubSubEventHandler(hub_name, ['*'], {

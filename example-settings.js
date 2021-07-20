@@ -1,5 +1,5 @@
 export default config = {
-    DEFAULT_WPS_CONN_STRING: '<azure-web-pubsub-connection-string>',
+    DEFAULT_WPS_CONN_STRING: '<web-pubsub-connection-string>',
     DEFAULT_WPS_MAIN_PUB: "graphql_main",
     DEFAULT_WPS_PUBSUB_PUB: "graphql_pubsub",
     DEFAULT_PUBSUB_ENGINE_HANDLER_URL: "/wps-services/pubsub",
