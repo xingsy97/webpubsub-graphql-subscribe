@@ -27,16 +27,16 @@
     }
   ],
   "scripts": {
+    "watch": "tsc -w",
     "prepublishOnly": "npm run test",
     "compile": "tsc",
     "pretest": "npm run compile",
-    "test": "npm run testonly -- && npm run integration --",
-    "posttest": "npm run lint",
-    "lint": "tslint --project ./tsconfig.json ./src/**/*.ts",
-    "watch": "tsc -w",
-    "testonly": "mocha --reporter spec --full-trace ./dist/tests/test.js",
     "preintegration": "npm run compile",
-    "integration": "mocha --reporter spec --full-trace ./dist/tests/test.js"
+    "posttest": "npm run lint",
+    "test": "npm run testonly -- && npm run integration --",
+    "lint": "tslint --project ./tsconfig.json ./src/**/*.ts",
+    "testonly": "mocha --reporter spec --full-trace ./dist/src/tests/test.js",
+    "integration": "mocha --reporter spec --full-trace ./dist/src/tests/test.js"
   },
   "dependencies": {
     "@azure/web-pubsub": "^1.0.0-beta.3",

@@ -1,0 +1,16 @@
+.DS_Store
+.vscode
+coverage
+dist
+node_modules
+npm-debug.log
+package-lock.json
+typings
+yarn-error.log
+yarn.lock
+dev-notes.md
+settings.js
+settings.ts
+setting.js
+setting.ts
+.vs
