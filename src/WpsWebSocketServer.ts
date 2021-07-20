@@ -7,7 +7,7 @@ import WebSocket = require("ws");
 import { config } from "../settings";
 
 /*
-	a WebSocket.Server with no real server serice and corresponding port with an event emitter.
+	a virtual WebSocket.Server without real server service
 */
 class VirtualWebSocketServer extends WebSocket.Server{
 	ee:EventEmitter = new EventEmitter();
@@ -25,9 +25,6 @@ class VirtualWebSocketServer extends WebSocket.Server{
 	}
 }
 
-/*
-
-*/
 class SubWpsWebSocketServer extends VirtualWebSocketServer{
 	serviceClient: WebPubSubServiceClient;
 	connectionId: string;
