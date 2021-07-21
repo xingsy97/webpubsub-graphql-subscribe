@@ -42,19 +42,19 @@ npm install
 
 5. Rename file `example-settings.js` to `settings.js`. Then replace its `<web-pubsub-connection-string>` with your own Azure Web PubSub connection string.
 
-6. Compile && Run the demo
+6. Run the demo
 ```bash
-npm run compile
-npm run integration
+npm run demo
 ```
 
 7. Open your web browser like Google Chrome, visit `http://localhost:4000`.
-Copy the following GraphQL query to the left panel and click the play button.
+Copy the following GraphQL query to the left panel.
 ```gql
 subscription sampleSubscription {
   numberIncremented
 }
 ```
+Then click the play button and watch the right pannel.
 
 ## Implementations
 - class `WpsWebSocketServer`

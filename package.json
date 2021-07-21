@@ -1,25 +1,25 @@
 {
   "name": "web-pubsub-graphql-virtual-ws",
   "version": "1.0.0",
-  "description": "",
-  "main": "dist/index.js",
+  "description": "use Azure WebPub service in GraphQL subscriptions",
+  "main": "dist/src/demos/demo.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/xxx/xxx.git"
+    "url": "https://github.com/xingsy97/webpubsub-graphql-subscribe.git"
   },
   "keywords": [
+    "graphql",
     "webpubsub",
     "azure",
-    "graphql",
     "apollo",
     "subscriptions"
   ],
   "author": "xingsy97",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/xxx/issues"
+    "url": "https://github.com/xingsy97/webpubsub-graphql-subscribe/issues"
   },
-  "homepage": "https://github.com/xxx/my-azure",
+  "homepage": "https://github.com/xingsy97/webpubsub-graphql-subscribe",
   "contributors": [
     {
       "name": "xingsy97",
@@ -28,15 +28,14 @@
   ],
   "scripts": {
     "watch": "tsc -w",
-    "prepublishOnly": "npm run test",
     "compile": "tsc",
-    "pretest": "npm run compile",
-    "preintegration": "npm run compile",
+    "demo": "npm run compile && mocha --reporter spec --full-trace ./dist/src/demos/demo.js",
     "posttest": "npm run lint",
-    "test": "npm run testonly -- && npm run integration --",
     "lint": "tslint --project ./tsconfig.json ./src/**/*.ts",
     "testonly": "mocha --reporter spec --full-trace ./dist/src/tests/test.js",
-    "integration": "mocha --reporter spec --full-trace ./dist/src/tests/test.js"
+    "integration": "mocha --reporter spec --full-trace ./dist/src/tests/test.js",
+    "test": "npm run testonly -- && npm run integration --",
+    "prepublishOnly": "npm run test"
   },
   "dependencies": {
     "@azure/web-pubsub": "^1.0.0-beta.3",

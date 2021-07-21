@@ -26,7 +26,7 @@ export class WpsPubSub extends PubSubEngine {
 	ws: any;
 	ackId: number;
 
-	constructor(app: any) {
+	constructor() {
 		super();
 		this.subscriptions = {};
 		this.subIdCounter = 0;
@@ -35,28 +35,6 @@ export class WpsPubSub extends PubSubEngine {
 		this.wps_userId = `pubsubEngine-${uuidv4()}`;
 		this.ws = undefined;
 		this.ackId = 1;
-
-		let handler = new WebPubSubEventHandler(config.DEFAULT_WPS_PUBSUB_PUB, ['*'], {
-			path: config.DEFAULT_PUBSUB_ENGINE_HANDLER_URL,
-			handleConnect: (req, res) => {
-				log("handleConnect req.context = ", req.context)
-				res.success({groups: ['pubsub-users'],	subprotocol: "json.webpubsub.azure.v1"});
-			},
-
-			onConnected: async req => {
-				log(`onConnected`);
-			}, 
-
-			handleUserEvent: async (req, res) => {
-				log("handleUserEvent", req.data);
-			  	res.success();
-			},
-
-			onDisconnected: async req => {
-				log(`[onDisconnected] ${req.context.userId}`);
-			}, 
-		});
-		app.use(handler.getMiddleware());
 	}
 
 	public static get_eventName(eventName: string) { return `event-${eventName}`}
@@ -170,5 +148,43 @@ export class PubSub extends PubSubEngine {
     delete this.subscriptions[subId];
     this.ee.removeListener(triggerName, onMessage);
   }
+}
+*/
+
+
+
+
+/*
+constructor(app: any) {
+		super();
+		this.subscriptions = {};
+		this.subIdCounter = 0;
+		
+		this.serviceClient = new WebPubSubServiceClient(config.DEFAULT_WPS_CONN_STRING, config.DEFAULT_WPS_PUBSUB_PUB);
+		this.wps_userId = `pubsubEngine-${uuidv4()}`;
+		this.ws = undefined;
+		this.ackId = 1;
+
+		// let handler = new WebPubSubEventHandler(config.DEFAULT_WPS_PUBSUB_PUB, ['*'], {
+		// 	path: config.DEFAULT_PUBSUB_ENGINE_HANDLER_URL,
+		// 	handleConnect: (req, res) => {
+		// 		log("handleConnect req.context = ", req.context)
+		// 		res.success({groups: ['pubsub-users'],	subprotocol: "json.webpubsub.azure.v1"});
+		// 	},
+
+		// 	onConnected: async req => {
+		// 		log(`onConnected`);
+		// 	}, 
+
+		// 	handleUserEvent: async (req, res) => {
+		// 		log("handleUserEvent", req.data);
+		// 	  	res.success();
+		// 	},
+
+		// 	onDisconnected: async req => {
+		// 		log(`[onDisconnected] ${req.context.userId}`);
+		// 	}
+		// });
+		// app.use(handler.getMiddleware());
 }
 */

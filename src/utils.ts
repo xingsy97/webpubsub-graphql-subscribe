@@ -5,6 +5,7 @@ export function log(...args: any){
 	console.log(new Date(), ...args);	
 }
 
+// a method decorator
 export function LOG(log_msg: string = "") {
 	return function (target:any, propertyKey:any, descriptor: PropertyDescriptor) {
 		var originalMethod = descriptor.value;
