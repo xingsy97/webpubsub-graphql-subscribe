@@ -22,13 +22,16 @@ Then you'll get a forwarding endpoint `http://{ngrok-id}.ngrok.io` like `http://
 
 3. Set `Event Handler` in Azure Web PubSub service. Go to **Azure portal** -> Find your Web PubSub resource -> **Settings**. Add two new hub settings as below. Replace the {ngrok-id} to yours. 
 
-| Hub Name: | graphql_main                                   |                    |                                |
-| --------- | ---------------------------------------------- | ------------------ | ------------------------------ |
-|           | URL Template                                   | User Event Pattern | System Events                  |
-|           | http://{ngrok-id}.ngrok.io/wps-services/main   | *                  | connect,connected,disconnected |
-| Hub Name: | graphql_pubsub                                 |                    |                                |
-|           | URL Template                                   | User Event Pattern | System Events                  |
-|           | http://{ngrok-id}.ngrok.io/wps-services/pubsub | *                  | connect,connected,disconnected |
+| Hub Name: graphql_main                         |                    |                                |
+| ---------------------------------------------- | ------------------ | ------------------------------ |
+| URL Template                                   | User Event Pattern | System Events                  |
+| http://{ngrok-id}.ngrok.io/wps-services/main   | *                  | connect,connected,disconnected |
+
+
+| Hub Name: graphql_pubsub                       |                    |                                |
+| ---------------------------------------------- | ------------------ | ------------------------------ |
+| URL Template                                   | User Event Pattern | System Events                  |
+| http://{ngrok-id}.ngrok.io/wps-services/pubsub | *                  | connect,connected,disconnected |
 
 4. Clone this repository and install required package
 ```git
@@ -53,7 +56,7 @@ subscription sampleSubscription {
 }
 ```
 
-## Details
+## Implementations
 - class `WpsWebSocketServer`
   - Original GraphQL subscriptions implementation starts up a WebSocket server which listens to clients and maintains WebSocket connections in server-side. 
   - This class replaces original `WebSocket.Server` and communicate between the server and WebPub service using HTTP protocol.
@@ -63,6 +66,6 @@ subscription sampleSubscription {
   - It implements the `PubSubEngine` Interface from the `graphql-subscriptions` package using Azure Web PubSub service.
   - It replaces the original in-memory event system `PubSub` and allows you to connect your subscriptions manager to an Azure Web PubSub service to support multiple subscription manager instances.
 
-## How to Integrate this package into your existing Apollo server
+## How to Integrate this package into an existing Apollo server 
 - `./src/tests/test.ts` is modified from an [example](https://github.com/apollographql/docs-examples/blob/7105d77acfc67d6cb4097cc27a7956051ec0c1b5/server-subscriptions-as3/index.js) provided by Apollo GraphQL. 
 - `test.ts` shows how to integrate `WpsWebSocketServer` and `WpsPubSub` into an existing Apollo server. Refer to its code and comments for details.
