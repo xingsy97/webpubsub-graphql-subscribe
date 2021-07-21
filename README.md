@@ -53,8 +53,16 @@ subscription sampleSubscription {
 }
 ```
 
-## Implementation
+## Details
 - class `WpsWebSocketServer`
+  - Original GraphQL subscriptions implementation starts up a WebSocket server which listens to clients and maintains WebSocket connections in server-side. 
+  - This class replaces original `WebSocket.Server` and communicate between the server and WebPub service using HTTP protocol.
+  - And clients use WebSocket communicates with WebPub service rather than directly communicate with our server by WebSocket.
 
+- class `WpsPubSub`
+  - It implements the `PubSubEngine` Interface from the `graphql-subscriptions` package using Azure Web PubSub service.
+  - It replaces the original in-memory event system `PubSub` and allows you to connect your subscriptions manager to an Azure Web PubSub service to support multiple subscription manager instances.
 
-- class 
+## How to Integrate this package into your existing Apollo server
+- `./src/tests/test.ts` is modified from an [example](https://github.com/apollographql/docs-examples/blob/7105d77acfc67d6cb4097cc27a7956051ec0c1b5/server-subscriptions-as3/index.js) provided by Apollo GraphQL. 
+- `test.ts` shows how to integrate `WpsWebSocketServer` and `WpsPubSub` into an existing Apollo server. Refer to its code and comments for details.

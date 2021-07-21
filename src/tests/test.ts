@@ -1,13 +1,15 @@
-// libs
+// Modified From https://github.com/apollographql/docs-examples/blob/7105d77acfc67d6cb4097cc27a7956051ec0c1b5/server-subscriptions-as3/index.js
 import WpsWebSocketServer from '../WpsWebSocketServer'
 import {WpsPubSub} from '../webpubsub-pubsub'
 import {config} from "../../settings"
-const {ApolloServer, gql } = require('apollo-server');
+import {ApolloServer, gql} from "apollo-server"
 const express = require('express');
 
-// global variable
+// replace original `const pubsub = new PubSub();`
 const app = express();
-const pubsub = new WpsPubSub(app);	// const pubsub = new PubSub();
+const pubsub = new WpsPubSub(app);	
+// ----------------------------------------
+
 let currentNumber = 0;
 
 // Schema definition
@@ -37,20 +39,24 @@ function incrementNumber() {
 async function main() {
 	const apolloServer = new ApolloServer({typeDefs, resolvers,});
 
+	// create WpsWebSocketServer and get Web PubSub WebSocket endpoint URL
 	var wpsServer = new WpsWebSocketServer(config.DEFAULT_WPS_HTTP_PORT, config.DEFAULT_WPS_CONN_STRING, config.DEFAULT_WPS_MAIN_PUB, app);
 	let wps_endpoint_url = await wpsServer.getWebSocketUrl();
-	
+	// ----------------------------------------------------------------------
+
+	// set the `subscriptionsPath` and use `installSubscriptionHandlers` to make `wpsServer` handle GraphQL subsciption query
 	apolloServer.subscriptionsPath = wps_endpoint_url;
 	apolloServer.installSubscriptionHandlers(wpsServer);
 	await pubsub.initWebSocket();
-	// apolloServer.
+	// ----------------------------------------------------------------------
+	
 	apolloServer.listen().then(({url:any}:any) => {
+		console.log(`🚀 Visit http://localhost:4000`) 
 		console.log(`🚀 Subscription endpoint ready at Azure WebPubSub Service`) 
 		console.log('🚀 Query at studio.apollographql.com/dev')
 	});
 
 	incrementNumber();
 }
-
 
 main()

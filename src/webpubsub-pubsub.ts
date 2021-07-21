@@ -11,6 +11,12 @@ export interface PubSubOptions {
 	eventEmitter?: EventEmitter;
 }
 
+
+/** 
+  * `WpsPubsub` implements the `PubSubEngine` Interface from the `graphql-subscriptions` package using Azure Web PubSub service.
+  * It replaces the original in-memory event system `PubSub` and 
+  * allows you to connect your subscriptions manager to an Azure Web PubSub service to support multiple subscription manager instances.
+ */
 export class WpsPubSub extends PubSubEngine {
 	protected ee: EventEmitter;
 	private subscriptions: { [key: string]: [string, (...args: any[]) => void] };
