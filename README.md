@@ -4,9 +4,9 @@
 [Azure WebPub](https://docs.microsoft.com/en-us/azure/azure-web-pubsub/overview) is a real-time messaging cloud service.
 In GraphQL, `subscriptions` are long-lasting GraphQL read operations that can update their result whenever a particular server-side event occurs. And it is usually implemented with WebSocket protocol. 
 
-Firstly, this package helps developers use Microsoft Azure WebPub service to avoid server-side maintainence of WebSocket connections between users clients and GraphQL server caused by `subscriptions`.
+Firstly, this package helps developers use Microsoft Azure WebPub service to avoid server-side maintainence of WebSocket connections between users clients and GraphQL server caused by `subscriptions` query from clients.
 
-Secondly, this package provides a replacement for `PubSub` (a in-memory event-publishing system [PubSub](https://www.apollographql.com/docs/apollo-server/data/subscriptions/#the-pubsub-class) provided by [Apollo server](https://www.apollographql.com/docs/apollo-server/data/subscriptions/) ) using Azure WebPub.
+Secondly, this package provides a replacement for `PubSub` using Azure Web PubSub service. [PubSub](https://www.apollographql.com/docs/apollo-server/data/subscriptions/#the-pubsub-class) an in-memory event-publishing system provided by [Apollo server](https://www.apollographql.com/docs/apollo-server/data/subscriptions/).
 
 ## How to deploy a demo 
 
