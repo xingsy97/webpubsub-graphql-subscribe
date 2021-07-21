@@ -44,7 +44,7 @@ npm install
 
 6. Compile && Run the demo
 ```bash
-npm run demo
+npm run compile && npm run demo
 ```
 
 7. Open your web browser like Google Chrome, visit `http://localhost:4000`.

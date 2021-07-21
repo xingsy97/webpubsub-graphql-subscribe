@@ -29,7 +29,7 @@
   "scripts": {
     "watch": "tsc -w",
     "compile": "tsc",
-    "demo": "npm run compile && mocha --reporter spec --full-trace ./dist/src/demos/demo.js",
+    "demo": "mocha --reporter spec --full-trace ./dist/src/demos/demo.js",
     "posttest": "npm run lint",
     "lint": "tslint --project ./tsconfig.json ./src/**/*.ts",
     "testonly": "mocha --reporter spec --full-trace ./dist/src/tests/test.js",
