@@ -1,6 +1,6 @@
 // Modified From https://github.com/apollographql/docs-examples/blob/7105d77acfc67d6cb4097cc27a7956051ec0c1b5/server-subscriptions-as3/index.js
 import WpsWebSocketServer from '../WpsWebSocketServer'
-import {WpsPubSub} from '../webpubsub-pubsub'
+import {WpsPubSub} from '../azure-wps-pubsub'
 import {config} from "../../settings"
 import {ApolloServer, gql} from "apollo-server"
 const express = require('express');

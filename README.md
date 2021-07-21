@@ -31,7 +31,7 @@ Then you'll get a forwarding endpoint `http://{ngrok-id}.ngrok.io` like `http://
 | Hub Name: graphql_pubsub                       |                    |                                |
 | ---------------------------------------------- | ------------------ | ------------------------------ |
 | URL Template                                   | User Event Pattern | System Events                  |
-| http://{ngrok-id}.ngrok.io/wps-services/pubsub | *                  | connect,connected,disconnected |
+| http://{ngrok-id}.ngrok.io/wps-services/pubsub | *                  | No system Events is selected   |
 
 4. Clone this repository and install required package
 ```git
@@ -42,7 +42,7 @@ npm install
 
 5. Rename file `example-settings.js` to `settings.js`. Then replace its `<web-pubsub-connection-string>` with your own Azure Web PubSub connection string.
 
-6. Run the demo
+6. Compile && Run the demo
 ```bash
 npm run demo
 ```

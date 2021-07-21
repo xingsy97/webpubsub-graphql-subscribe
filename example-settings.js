@@ -5,5 +5,5 @@ export default config = {
     DEFAULT_PUBSUB_ENGINE_HANDLER_URL: "/wps-services/pubsub",
     DEFAULT_WPS_MAIN_HANDLER_URL: "/wps-services/main",
     DEFAULT_WPS_HTTP_PORT: 8888,
-    DEBUG: false,
+    DEBUG: true,
 };

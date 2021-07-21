@@ -2,7 +2,8 @@ import {config} from "../settings";
 var DEBUG = config.DEBUG;
 
 export function log(...args: any){
-	console.log(new Date(), ...args);	
+	if (DEBUG)
+		console.log(new Date(), ...args);	
 }
 
 // a method decorator
@@ -13,14 +14,10 @@ export function LOG(log_msg: string = "") {
 		// console.log(`functionName=${propertyKey}   desc=${JSON.stringify(descriptor)}  `);
 		
 		descriptor.value = function(...args: any[]) {
-			if (DEBUG) {
-				log(`[begin] ${log_msg}`);
-				console.log('args = ', args)
-			}
+			log(`[begin] ${log_msg}`);
+			log('args = ', args)
 			let result = originalMethod.apply(this, args);
-			if (DEBUG) {
-				log(`[ end ] ${log_msg}`);
-			}
+			log(`[ end ] ${log_msg}`);
 			return result;
 		};
 
