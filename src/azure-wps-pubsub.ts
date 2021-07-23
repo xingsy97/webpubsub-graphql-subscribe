@@ -1,9 +1,8 @@
 import { WebPubSubServiceClient } from '@azure/web-pubsub';
 import { EventEmitter } from 'events';
 import { PubSubEngine } from './graphql-pubsub-common/pubsub-engine';
-import { LOG , log} from './utils';
+import { LOG , log, config} from './utils';
 import { v4 as uuidv4 } from 'uuid';
-import {config} from "../settings";
 const WebSocket = require('ws');
 
 export interface PubSubOptions {
@@ -25,9 +24,9 @@ export class WpsPubSub extends PubSubEngine {
 	wps_userId: string;
 	ws: any;
 	
-	constructor() {
+	constructor(webpubsub_conn_string: string) {
 		super();
-		this.serviceClient = new WebPubSubServiceClient(config.DEFAULT_WPS_CONN_STRING, config.DEFAULT_WPS_PUBSUB_PUB);
+		this.serviceClient = new WebPubSubServiceClient(webpubsub_conn_string, config.DEFAULT_WPS_PUBSUB_PUB);
 		this.wps_userId = `pubsubEngine-${uuidv4()}`;
 		this.ws = undefined;
 	}
@@ -40,8 +39,7 @@ export class WpsPubSub extends PubSubEngine {
 			userId: this.wps_userId, 
 			roles: ["webpubsub.joinLeaveGroup", "webpubsub.sendToGroup"]}
 		);
-		log(`[wps-pubsub-ws-url] = ${token.url.substr(0, 30)} ...`);
-		log(`[userId] = ${this.wps_userId}`);
+		log(`[wps-pubsub-ws-url] = ${token.url.substr(0, 30)}..., [userId] = ${this.wps_userId}`);
 		this.ws = new WebSocket(token.url, "json.webpubsub.azure.v1");
 		return new Promise((resolve:any, reject:any) => {
 			this.ws.on('open', () => { 
@@ -58,6 +56,7 @@ export class WpsPubSub extends PubSubEngine {
 			})
 			this.ws.on('error', (err: any) => {
 				log(err);
+				reject(err);
 			});
 			
 		});
@@ -74,7 +73,6 @@ export class WpsPubSub extends PubSubEngine {
 			// ackId: this.ackId
 		}));
 		this.ackId++;
-		// this.serviceClient.group(WpsPubSub.get_eventName(eventName)).sendToAll(payload);
 		return Promise.resolve();
 	}
 

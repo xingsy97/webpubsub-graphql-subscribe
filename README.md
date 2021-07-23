@@ -1,7 +1,7 @@
 # webpubsub-graphql-subscribe
 
 ## Introduction
-[Microsoft Azure WebPub](https://docs.microsoft.com/en-us/azure/azure-web-pubsub/overview) is a real-time messaging cloud service.
+[Microsoft Azure Web PubSub](https://docs.microsoft.com/en-us/azure/azure-web-pubsub/overview) is a real-time messaging cloud service.
 In GraphQL, `subscriptions` are long-lasting GraphQL read operations that can update their result whenever a particular server-side event occurs. And it is usually implemented with WebSocket protocol. 
 
 Firstly, this package helps developers use Microsoft Azure WebPub service to avoid server-side maintenance of WebSocket connections between users clients and GraphQL server caused by `subscriptions` query from clients.
@@ -47,7 +47,7 @@ npm install
 npm run compile && npm run demo
 ```
 
-7. Open your web browser like Google Chrome, visit `http://localhost:4000`.
+7. Open your web browser like Google Chrome, visit `http://localhost:4000/graphql`.
 Copy the following GraphQL query to the left panel.
 ```gql
 subscription sampleSubscription {

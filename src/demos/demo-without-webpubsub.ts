@@ -1,14 +1,14 @@
 // Modified From https://github.com/apollographql/docs-examples/blob/7105d77acfc67d6cb4097cc27a7956051ec0c1b5/server-subscriptions-as3/index.js
-import {create_webpubsub_subscribe_server} from '../WpsWebSocketServer'
-import {WpsPubSub} from '../azure-wps-pubsub'
 import { ApolloServer, gql } from "apollo-server-express";
+import { execute, subscribe } from "graphql";
+import { PubSub } from "graphql-subscriptions";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import { createServer } from "http";
+import { SubscriptionServer } from 'subscriptions-transport-ws';
 import express from 'express';
 import {config} from "../utils"
 
-const webpubsub_conn_string = "<webpubsub-connection-string>"
-const pubsub = new WpsPubSub(webpubsub_conn_string);
+const pubsub = new PubSub();
 
 let currentNumber = 0;
 
@@ -47,8 +47,12 @@ async function main() {
 	const apolloServer = new ApolloServer({schema});
 	await apolloServer.start();
 	app.use(apolloServer.getMiddleware());
-
-	await create_webpubsub_subscribe_server(apolloServer, schema, pubsub, webpubsub_conn_string);
+	
+	// Create a Subscription Server
+	SubscriptionServer.create(
+		{ schema, execute, subscribe },
+		{ server: httpServer, path: apolloServer.graphqlPath }
+	);
 	
 	// start the http server
 	httpServer.listen(config.DEFAULT_SERVER_PORT, () => {

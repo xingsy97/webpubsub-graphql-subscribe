@@ -1,9 +1,13 @@
-const express = require('express');
+
 import { WebPubSubServiceClient } from "@azure/web-pubsub";
 import { WebPubSubEventHandler } from "@azure/web-pubsub-express";
-import {LOG, log} from "./utils"
-import WebSocket = require("ws");
-import { config } from "../settings";
+import { ApolloServer} from "apollo-server-express";
+import { execute, GraphQLSchema, subscribe } from "graphql";
+import { SubscriptionServer } from 'subscriptions-transport-ws';
+import express from 'express';
+import WebSocket from "ws";
+import { WpsPubSub } from "./azure-wps-pubsub";
+import {LOG, log, config} from "./utils"
 
 /**
   * a virtual WebSocket.Server without real server
@@ -46,10 +50,9 @@ class WpsWebSocketServer extends VirtualWebSocketServer {
 	connectionId_to_ws: { [key:string]: SubWpsWebSocketServer } = {};
 	serviceClient: WebPubSubServiceClient;
 
-	constructor(wps_http_port: number, wps_conn_string: string, hub_name: string, express_server: any){
+	constructor(wps_http_port: number, wps_conn_string: string, hub_name: string, express_server?: any){
 		super();
 		this.serviceClient = new WebPubSubServiceClient(wps_conn_string, hub_name);
-		// this.readyState = WebSocket.CLOSED;
 		this.app = express_server ? express_server : express();
 
 		let handler = new WebPubSubEventHandler(hub_name, ['*'], {
@@ -101,4 +104,30 @@ class WpsWebSocketServer extends VirtualWebSocketServer {
 
 }
 
-export default WpsWebSocketServer;
+
+/**
+ * Create a `subscriptionServer` based on `class WpsWebSocketServer` and initialize `pubsub`
+ */
+async function create_webpubsub_subscribe_server(apolloServer: ApolloServer, schema: GraphQLSchema, pubsub: WpsPubSub, webpubsub_conn_string: string) {
+	var wpsServer = new WpsWebSocketServer(config.DEFAULT_WPS_HTTP_PORT, webpubsub_conn_string, config.DEFAULT_WPS_MAIN_PUB);
+	apolloServer.subscriptionsPath = await wpsServer.getWebSocketUrl();
+	await pubsub.initWebSocket();
+	SubscriptionServer.create(
+		{ schema, execute, subscribe },
+		wpsServer
+	);
+}
+
+/**
+ * use Azure Web PubSub service to handle GraphQL subscriptions query in Apollo server
+ * create WpsWebSocketServer, set the `subscriptionsPath`
+ * use `installSubscriptionHandlers` to make `wpsServer` handle GraphQL subsciption query
+ */
+// async function applyWpsToApolloServer(apolloServer: ApolloServer, config:any) {
+// 	var wpsServer = new WpsWebSocketServer(config.DEFAULT_WPS_HTTP_PORT, config.DEFAULT_WPS_CONN_STRING, config.DEFAULT_WPS_MAIN_PUB);
+// 	apolloServer.subscriptionsPath = await wpsServer.getWebSocketUrl();
+// 	apolloServer.installSubscriptionHandlers(wpsServer);
+// }
+
+// export default WpsWebSocketServer;
+export { WpsWebSocketServer, create_webpubsub_subscribe_server};
