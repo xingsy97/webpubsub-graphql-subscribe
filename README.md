@@ -8,7 +8,7 @@ Firstly, this package helps developers use Microsoft Azure WebPub service to avo
 
 Secondly, this package provides a replacement for `PubSub` using Azure Web PubSub service. [PubSub](https://www.apollographql.com/docs/apollo-server/data/subscriptions/#the-pubsub-class) is an in-memory event-publishing system provided by [Apollo server](https://www.apollographql.com/docs/apollo-server/data/subscriptions/).
 
-## How to deploy a demo 
+## Prepare
 
 1. Create a Microsoft Azure Web PubSub resource instance. Details are [Here](https://docs.microsoft.com/en-us/azure/azure-web-pubsub/quickstart-serverless?tabs=javascript).
 
@@ -33,21 +33,22 @@ Then you'll get a forwarding endpoint `http://{ngrok-id}.ngrok.io` like `http://
 | URL Template                                   | User Event Pattern | System Events                  |
 | http://{ngrok-id}.ngrok.io/wps-services/pubsub | *                  | No system Events is selected   |
 
-4. Clone this repository and install required package
+## Deploy a demo
+1. Clone this repository and install required package
 ```git
 git clone https://github.com/xingsy97/webpubsub-graphql-subscribe
 cd webpubsub-graphql-subscribe
 npm install
 ```
 
-5. Rename file `example-settings.js` to `settings.js`. Then replace its `<web-pubsub-connection-string>` with your own Azure Web PubSub connection string.
+2. replace `<web-pubsub-connection-string>` in `demos/demo.js` Line 7 to your own Azure Web PubSub connection string
 
-6. Compile && Run the demo
+3. Compile && Run the demo
 ```bash
 npm run compile && npm run demo
 ```
 
-7. Open your web browser like Google Chrome, visit `http://localhost:4000/graphql`.
+4. Open your web browser like Google Chrome, visit `http://localhost:4000/graphql`.
 Copy the following GraphQL query to the left panel.
 ```gql
 subscription sampleSubscription {
@@ -55,6 +56,44 @@ subscription sampleSubscription {
 }
 ```
 Then click the play button and watch the right pannel.
+
+## Usage
+`src/demos/demo-without-webpubsub.ts` is a sample show Subscriptions in Apollo Server without Azure WebPub service. Follow these instructions, we will apply Web Pubsub to this sample.
+1. define a variable to store Web PubSub connection string
+```javascript
+const webpubsub_conn_string = "<webpubsub-connection-string>"
+```
+
+2. replace original in-memory event system `PubSub` to our `WpsPubSub` based on Web PubSub.
+
+Old:
+```
+const pubsub = new PubSub();
+```
+
+New: 
+```
+const pubsub = new WpsPubSub(webpubsub_conn_string);
+```
+
+3. use `create_webpubsub_subscribe_server` exported by our package to create a subscription server
+
+Old:
+```javascript
+SubscriptionServer.create(
+  { schema, execute, subscribe },
+  { server: httpServer, path: apolloServer.graphqlPath }
+);
+```
+
+New:
+
+```javascript
+await create_webpubsub_subscribe_server(apolloServer, schema, pubsub, webpubsub_conn_string);
+```
+
+Now your subscription server inside Apollo Server is based on Azure Web PubSub service. Refer to `src/demos/demo.ts` for complete source code.
+
 
 ## Implementations
 - class `WpsWebSocketServer`
@@ -66,6 +105,3 @@ Then click the play button and watch the right pannel.
   - It implements the `PubSubEngine` Interface from the `graphql-subscriptions` package using Azure Web PubSub service.
   - It replaces the original in-memory event system `PubSub` and allows you to connect your subscriptions manager to an Azure Web PubSub service to support multiple subscription manager instances.
 
-## How to Integrate this package into an existing Apollo server 
-- `./src/tests/test.ts` is modified from an [example](https://github.com/apollographql/docs-examples/blob/7105d77acfc67d6cb4097cc27a7956051ec0c1b5/server-subscriptions-as3/index.js) provided by Apollo GraphQL. 
-- `test.ts` shows how to integrate `WpsWebSocketServer` and `WpsPubSub` into an existing Apollo server. Refer to its code and comments for details.

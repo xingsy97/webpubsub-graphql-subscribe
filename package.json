@@ -1,8 +1,8 @@
 {
-  "name": "web-pubsub-graphql-virtual-ws",
-  "version": "1.0.0",
+  "name": "web-pubsub-graphql-subscribe",
+  "version": "1.0.1",
   "description": "use Azure WebPub service in GraphQL subscriptions",
-  "main": "dist/src/demos/demo.js",
+  "main": "dist/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/xingsy97/webpubsub-graphql-subscribe.git"
@@ -32,11 +32,7 @@
     "demo": "mocha --reporter spec --full-trace ./dist/demos/demo.js",
     "naive": "mocha --reporter spec --full-trace ./dist/demos/demo-without-webpubsub.js",
     "posttest": "npm run lint",
-    "lint": "tslint --project ./tsconfig.json ./src/**/*.ts",
-    "testonly": "mocha --reporter spec --full-trace ./dist/src/tests/test.js",
-    "integration": "mocha --reporter spec --full-trace ./dist/src/tests/test.js",
-    "test": "npm run testonly -- && npm run integration --",
-    "prepublishOnly": "npm run test"
+    "lint": "tslint --project ./tsconfig.json ./src/**/*.ts"
   },
   "dependencies": {
     "@azure/web-pubsub": "^1.0.0-beta.3",
